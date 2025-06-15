@@ -37,6 +37,9 @@ public class Intake {
         leftRotate = hardwareMap.get(Servo.class, "iLR");
         rightRotate = hardwareMap.get(Servo.class, "iRR");
         pivot = hardwareMap.get(Servo.class, "iP");
+        pivot.setDirection(Servo.Direction.REVERSE);
+        pivot.setPosition(0);
+
         this.telemetry = telemetry;
     }
 
@@ -124,6 +127,7 @@ public class Intake {
     public void setPivotState(PivotState pivotState) {
         if (pivotState == PivotState.TRANSFER) {
             pivot.setPosition(intakePivotTransfer);
+
             this.pivotState = PivotState.TRANSFER;
         } else if (pivotState == PivotState.GROUND) {
             pivot.setPosition(intakePivotGround);

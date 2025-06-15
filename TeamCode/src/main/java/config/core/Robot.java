@@ -1,14 +1,23 @@
 package config.core;
 
+import static config.core.RobotConstants.intakePivotCloud;
+import static config.core.RobotConstants.intakePivotDrag;
+import static config.core.RobotConstants.intakePivotGround;
+import static config.core.RobotConstants.intakePivotHover;
+import static config.core.RobotConstants.intakePivotSpecimen;
+import static config.core.RobotConstants.intakePivotTransfer;
 import static config.core.util.Opmode.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import config.core.util.Alliance;
 import config.core.util.Opmode;
@@ -22,6 +31,10 @@ import config.subsystems.Outtake;
 import config.vision.limelight.old.OldVision;
 
 public class Robot {
+    private DcMotor frontLeftMotor;
+    private DcMotor frontRightMotor;
+    private DcMotor backLeftMotor;
+    private DcMotor backRightMotor;
     private HardwareMap h;
     private Telemetry t;
     private Gamepad g1a, g2a, g1, g2, p1, p2;
@@ -36,14 +49,15 @@ public class Robot {
     private OldVision v;
     private Opmode op = TELEOP;
     private boolean r = true;
+    private boolean extended = false;
     public static Pose autoEndPose = new Pose();
-
+    private int _x =0;
     public Pose s = new Pose();
     public double speed = 0.9;
     public Timer tTimer, sTimer, spec0Timer, spec180Timer, c0Timer, aFGTimer, aInitLoopTimer, sTTimer, fSATimer, sRTimer;
     public int flip = 1, tState = -1, sState = -1, spec0State = -1, spec180State = -1, c0State = -1, aFGState = -1, specTransferState = -1, fSAState = -1, sRState = -1, hState = -1;
     private boolean aInitLoop, frontScore = false, backScore = true, automationActive = false;
-
+    private boolean extension = false;
     public Robot(HardwareMap h, Telemetry t, Gamepad g1a, Gamepad g2a, Alliance a, Pose startPose, boolean robotCentric) {
         this.op = TELEOP;
         this.h = h;
@@ -52,6 +66,7 @@ public class Robot {
         this.g2a = g2a;
         this.a = a;
         this.r = robotCentric;
+        this.extended = false;
 
         f = new Follower(this.h, FConstants.class, LConstants.class);
         f.setStartingPose(startPose);
@@ -60,12 +75,24 @@ public class Robot {
         l = new Lift(this.h,this.t);
         i = new Intake(this.h,this.t);
         o = new Outtake(this.h,this.t);
+        e.toZero();
+
         // = new Light(this.h, this.t);
 
         this.g1 = new Gamepad();
         this.g2 = new Gamepad();
         this.p1 = new Gamepad();
         this.p2 = new Gamepad();
+
+        frontLeftMotor = h.get(DcMotor.class, "leftFront");
+        frontRightMotor = h.get(DcMotor.class, "rightFront");
+        backLeftMotor = h.get(DcMotor.class, "leftRear");
+        backRightMotor = h.get(DcMotor.class, "rightRear");
+        backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         tTimer = new Timer();
         sTimer = new Timer();
@@ -91,7 +118,7 @@ public class Robot {
         e = new Extend(this.h,this.t);
         l = new Lift(this.h,this.t);
         i = new Intake(this.h,this.t);
-        //o = new Outtake(this.h,this.t);
+        o = new Outtake(this.h,this.t);
         m = new ManualInput(this.t, this.g2, 0, true);
      //   v = new Vision(this.h, this.t, a == Alliance.BLUE ? new int[]{1,2} : new int[]{0,2});
 
@@ -129,7 +156,7 @@ public class Robot {
         e = new Extend(this.h,this.t);
         l = new Lift(this.h,this.t);
         i = new Intake(this.h,this.t);
-        //o = new Outtake(this.h,this.t);
+        o = new Outtake(this.h,this.t);
         m = new ManualInput(this.t, this.g2, subSamples, spec);
        // j = new Light(this.h, this.t);
 
@@ -161,21 +188,21 @@ public class Robot {
         l.periodic();
         i.periodic();
         o.periodic();
-        f.update();
+        f.update(); // to-do
         t.update();
     }
 
     public void aInitLoop(Gamepad g2a) {
-//        if (!aInitLoop) {
-//            if (aInitLoopTimer.getElapsedTimeSeconds() > 2) {
-//                o.init();
-//                t.addData("status", "ready to verify");
-//                aInitLoop = true;
-//            }
-//        }
-//
-//        p2.copy(g2);
-//        g2.copy(g2a);
+        if (!aInitLoop) {
+            if (aInitLoopTimer.getElapsedTimeSeconds() > 2) {
+                o.init();
+                t.addData("status", "ready to verify");
+                aInitLoop = true;
+            }
+        }
+
+        p2.copy(g2);
+        g2.copy(g2a);
 
         m.update(g2a);
         t.update();
@@ -192,13 +219,13 @@ public class Robot {
         l.periodic();
         i.periodic();
         o.periodic();
-        f.update();
+        //f.update();
         t.update();
     }
 
     public void tStart() {
         o.start();
-        f.startTeleopDrive();
+        //f.startTeleopDrive();
     }
 
     public void stop() {
@@ -245,17 +272,14 @@ public class Robot {
             flip = 1;
         }
 
-        if (g1.right_trigger > 0.1)
-            e.toFull();
+//        if (g2.right_trigger > 0.1)
+//            e.toFull();
 
-        if (g1.left_trigger > 0.1)
-            e.toZero();
-
-//        if (g2.a && !p2.a)
-//            if(getO().pivotState.equals(Outtake.PivotState.HALFSCORE))
-//                startScoreRelease();
-//            else
-//                o.switchGrabState();
+        if (g2.a && !p2.a)
+            if(getO().pivotState.equals(Outtake.PivotState.HALFSCORE))
+                startScoreRelease();
+            else
+                o.switchGrabState();
 
         if (g2.y && !p2.y) {
             o.transfer();
@@ -266,13 +290,11 @@ public class Robot {
             startSpecTransfer();
         }
 
-/*
         if (g2.x && !p2.x) {
             o.score();
             i.hover();
         }
-*/
- /*       if (g2.dpad_left && !p2.dpad_left) {
+        if (g2.dpad_left && !p2.dpad_left) {
             o.startSpecGrab();
             i.specimen();
         }
@@ -280,7 +302,7 @@ public class Robot {
         if (g2.dpad_right && !p2.dpad_right) {
             o.specimenScore180();
             i.specimen();
-        }*/
+        }
         
         if (g2.dpad_left && !p2.dpad_left) {
             if (!backScore) {
@@ -383,11 +405,11 @@ public class Robot {
         if (g2.right_trigger > 0.1 && !(p2.right_trigger > 0.1))
             e.switchExtendState();
 //
-//        if (g2.a && !p2.a)
-//            if(getO().pivotState.equals(Outtake.PivotState.HALFSCORE))
-//                startScoreRelease();
-//            else
-//                o.switchGrabState();
+        if (g2.a && !p2.a)
+            if(getO().pivotState.equals(Outtake.PivotState.HALFSCORE))
+                startScoreRelease();
+            else
+                o.switchGrabState();
 
         if (g2.y && !p2.y) {
             o.transfer();
@@ -455,15 +477,67 @@ public class Robot {
             i.drag();
         }
 
-//        if (getI().pivotState.equals(Intake.PivotState.CLOUD) || getO().pivotState.equals(Outtake.PivotState.SPECIMENGRAB180))
-//            speed = 0.6;
+        if (getI().pivotState == Intake.PivotState.CLOUD || getO().pivotState == Outtake.PivotState.SPECIMENGRAB180)
+            speed = 0.6;
 
         if (g2.options && !p2.options) {
             r = !r;
         }
 
-        f.setTeleOpMovementVectors(-g2.left_stick_y * speed, -g2.left_stick_x * speed, -g2.right_stick_x * speed * 0.5, r);
+
+        if (e.getState() == Extend.ExtendState.FULL){
+            _x=1;
+        } else _x=2;
+
+        t.addData("testx", _x);
+        t.addData("poss", e.getPos());
+        drive(g2.left_stick_x * speed,-g2.left_stick_y * speed, g2.right_stick_x * speed * 0.5);
+        //f.setTeleOpMovementVectors(-g2.left_stick_y * speed, -g2.left_stick_x * speed, -g2.right_stick_x * speed * 0.5, r);
+
     }
+
+
+
+    private void drive(double x, double y, double r) {
+
+        t.addData("xx", x);
+        t.addData("yy", y);
+        t.addData("rr", r);
+        double frontLeftPower = x + y + r;
+        double frontRightPower = -x + y - r;
+        double backLeftPower = -x + y + r;
+        double backRightPower = x + y - r;
+
+        // Normalize wheel powers to be less than 1.0
+        double max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
+        max = Math.max(max, Math.abs(backLeftPower));
+        max = Math.max(max, Math.abs(backRightPower));
+
+        if (max > 1.0) {
+            frontLeftPower /= max;
+            frontRightPower /= max;
+            backLeftPower /= max;
+            backRightPower /= max;
+        }
+
+        // Send powers to the wheels.
+        frontLeftMotor.setPower(frontLeftPower);
+        frontRightMotor.setPower(frontRightPower);
+        backLeftMotor.setPower(backLeftPower);
+        backRightMotor.setPower(backRightPower);
+
+        t.addData("FL Drive Power", frontLeftPower);
+        t.addData("FR Drive Power", frontRightPower);
+        t.addData("BL Drive Power", backLeftPower);
+        t.addData("BR Drive Power", backRightPower);
+        //t.addData("Left Slide Current", leftSlideMotor.getCurrent(CurrentUnit.AMPS));
+    }
+
+
+
+
+
+
 
     public HardwareMap getH() {
         return h;
@@ -668,6 +742,29 @@ public class Robot {
                 }
                 break;
         }
+
+        if (i.pivotState == Intake.PivotState.TRANSFER) {
+            t.addData("Pivot State", "Transfer");
+
+
+        } else if (i.pivotState == Intake.PivotState.GROUND) {
+            t.addData("Pivot State", "Ground");
+
+        } else if (i.pivotState == Intake.PivotState.HOVER) {
+            t.addData("Pivot State", "Hover");
+
+        } else if (i.pivotState == Intake.PivotState.CLOUD) {
+            t.addData("Pivot State", "Cloud");
+
+        } else if (i.pivotState == Intake.PivotState.SPECIMEN) {
+            t.addData("Pivot State", "Speciment");
+
+        } else if (i.pivotState == Intake.PivotState.DRAG) {
+            t.addData("Pivot State", "Drag");
+
+        }
+        t.addData("Pivote pos", i.pivot.getPosition());
+
     }
 
     public void setSubmersibleState(int x) {
@@ -717,7 +814,7 @@ public class Robot {
                 setSpecTransferState(1);
                 break;
             case 1:
-                if (getF().getCurrentTValue() >= 0.2) {
+                if (true) {
                     getI().transfer();
                     setSpecTransferState(2);
                 }

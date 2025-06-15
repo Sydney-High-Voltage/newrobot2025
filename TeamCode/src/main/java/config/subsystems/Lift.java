@@ -32,7 +32,7 @@ public class Lift {
     public PIDController pid;
     public int pidLevel = 0;
     public static int target;
-    public static double p = 0.01, i = 0, d = 0.00000000000005, f = 0.05;
+    public static double p = 0.002, i = 0, d = 0.00000000000005, f = 0.05;
 
 
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {

@@ -15,6 +15,7 @@ public class SoloDrive extends OpMode {
 
     @Override
     public void init() {
+        //telemetry.addData("gamepad", gamepad1.a);
         r = new Robot(hardwareMap, telemetry, gamepad1 , gamepad2, Alliance.BLUE, autoEndPose, false);
     }
 

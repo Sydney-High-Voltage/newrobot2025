@@ -38,9 +38,9 @@ public class RobotConstants {
     public static double intakeRotateCloudVertical = 0.81;
     public static double intakeRotateSpecimen = 0.45;
     public static double intakePivotTransfer= 0.625;
-    public static double intakePivotGround = 0.67;
-    public static double intakePivotHover = 0.43;
-    public static double intakePivotCloud = 0.555;
+    public static double intakePivotGround = 0.7;
+    public static double intakePivotHover = 0;
+    public static double intakePivotCloud = 0.55;
     public static double intakePivotSpecimen = 0;
     public static double intakeRotatePerDegree = 0.0011;
     public static double intakePivotDrag = 1;
@@ -57,7 +57,7 @@ public class RobotConstants {
     public static int liftToHang = 1250;
 
     // Extend Positions
-    public static double extendZero = 0.5075;
+    public static double extendZero = 0.54;
     public static double extendFull = 0.27; //.27
     public static double extendTransfer = .53;
     public static double extendInchesPer = 0.01484375 * 16;

@@ -30,6 +30,7 @@ public class Extend {
 
         left = hardwareMap.get(Servo.class, "eL");
         right = hardwareMap.get(Servo.class, "eR");
+        right.setDirection(Servo.Direction.REVERSE);
 
     }
 
@@ -81,11 +82,14 @@ public class Extend {
 
     public void switchExtendState() {
         if (state == ExtendState.FULL) {
+
             toZero();
         } else {
             toFull();
         }
     }
+
+
 
     public ExtendState getState() {
         return state;

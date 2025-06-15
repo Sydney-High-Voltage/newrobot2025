@@ -43,11 +43,13 @@ public class Outtake {
 //        rightRotate = hardwareMap.get(Servo.class, "oRR");
 //        leftPivot = hardwareMap.get(Servo.class, "oLP");
 //        rightPivot = hardwareMap.get(Servo.class, "oRP");
-        grab = hardwareMap.get(Servo.class, "iG");
-        leftRotate = hardwareMap.get(Servo.class, "iLR");
-        rightRotate = hardwareMap.get(Servo.class, "iRR");
-        leftPivot = hardwareMap.get(Servo.class, "iP");
-        rightPivot = hardwareMap.get(Servo.class, "iP");
+        grab = hardwareMap.get(Servo.class, "ograb");
+        leftRotate = hardwareMap.get(Servo.class, "olr");
+        rightRotate = hardwareMap.get(Servo.class, "orr");
+        leftPivot = hardwareMap.get(Servo.class, "olp");
+        rightPivot = hardwareMap.get(Servo.class, "orp");
+        //rightPivot.setDirection(Servo.Direction.REVERSE);
+        leftPivot.setDirection(Servo.Direction.REVERSE);
         this.telemetry = telemetry;
     }
 
