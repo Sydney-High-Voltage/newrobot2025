@@ -101,9 +101,9 @@ public class Intake {
                 rotateDegrees -= 45;
         }
 
-        setPivotState(PivotState.CLOUD);
-        setRotateState(RotateState.CLOUD);
-        setGrabState(GrabState.OPEN);
+//        setPivotState(PivotState.CLOUD);
+//        setRotateState(RotateState.CLOUD);
+//        setGrabState(GrabState.OPEN);
     }
 
     public void setGrabState(GrabState grabState) {

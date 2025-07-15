@@ -44,14 +44,14 @@ public class SixSamp extends OpModeCommand {
                         new FollowPath(r.getF(), config.core.paths.SixSamp.grab2())
                                                 .alongWith(
                                         new WaitCommand(700)
-                                                .andThen(
-                                        new InstantCommand(() -> r.getE().toFull())
-                                                .andThen(
-                                                        new WaitCommand(450),
-                                                        new Submersible(r),
-                                                        new Transfer(r)
-                                                )
-                                        )
+                                                //.andThen(
+//                                        new InstantCommand(() -> r.getE().toFull())
+//                                                .andThen(
+//                                                        new WaitCommand(450),
+//                                                        new Submersible(r),
+//                                                        new Transfer(r)
+//                                                )
+//                                        )
                                 ),
                         new Bucket(r)
                                 .alongWith(
@@ -60,14 +60,14 @@ public class SixSamp extends OpModeCommand {
                         new FollowPath(r.getF(), config.core.paths.SixSamp.grab3())
                                 .alongWith(
                                         new WaitCommand(500)
-                                                .andThen(
-                                        new InstantCommand(() -> r.getE().toFull())
-                                                .andThen(
-                                                        new WaitCommand(450),
-                                                        new Submersible(r),
-                                                        new Transfer(r)
-                                                )
-                                        )
+//                                                .andThen(
+//                                        new InstantCommand(() -> r.getE().toFull())
+//                                                .andThen(
+//                                                        new WaitCommand(450),
+//                                                        new Submersible(r),
+//                                                        new Transfer(r)
+//                                                )
+//                                        )
                                 ),
                         new Bucket(r)
                                 .alongWith(
@@ -76,14 +76,14 @@ public class SixSamp extends OpModeCommand {
                         new FollowPath(r.getF(), config.core.paths.SixSamp.grab4())
                                                 .alongWith(
                                                         new WaitCommand(500)
-                                                                .andThen(
-                                                        new InstantCommand(() -> r.getE().toFull())
-                                                                .andThen(
-                                                                        new WaitCommand(450),
-                                                                        new Submersible(r),
-                                                                        new Transfer(r)
-                                                                )
-                                                        )
+//                                                                .andThen(
+//                                                        new InstantCommand(() -> r.getE().toFull())
+//                                                                .andThen(
+//                                                                        new WaitCommand(450),
+//                                                                        new Submersible(r),
+//                                                                        new Transfer(r)
+//                                                                )
+//                                                        )
                                 ),
                         new Bucket(r)
                                 .alongWith(
@@ -135,12 +135,13 @@ public class SixSamp extends OpModeCommand {
                                         new InstantCommand(() -> {
                                             r.getO().transfer();
                                             r.getI().hover();
-                                            r.getL().toPark();
-                                            r.getE().toZero();
+                                            //r.getL().toPark();
+                                            //r.getE().toZero();
                                         }
                                         )
-                                ),
-                        new InstantCommand(() -> r.getE().toFull())
+                                )
+//                                ),
+//                        new InstantCommand(() -> r.getE().toFull())
                 )
         );
     }

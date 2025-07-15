@@ -343,6 +343,7 @@ public class Outtake {
         telemetry.addData("Outtake Grab State: ", grabState);
         telemetry.addData("Outtake Rotate State: ", rotateState);
         telemetry.addData("Outtake Pivot State: ", pivotState);
+        telemetry.addData("Outtake Position ", leftPivot.getPosition());
     }
 
     public void periodic() {
