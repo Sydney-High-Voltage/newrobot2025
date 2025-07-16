@@ -235,7 +235,7 @@ public class Outtake {
                 }
                 break;
             case 2:
-                if(specGrabAutoTimer.getElapsedTimeSeconds() > 0.18) {
+                if(specGrabAutoTimer.getElapsedTimeSeconds() > 0.5) {
                     setRotateState(RotateState.SPECIMENGRAB180);
                     setPivotState(PivotState.SPECIMENGRAB180);
                     setSpecGrabAutoState(-1);
