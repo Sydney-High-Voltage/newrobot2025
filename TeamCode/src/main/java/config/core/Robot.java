@@ -420,30 +420,37 @@ public class Robot {
         if (g2.x && !p2.x) {
             startSpecTransfer();
         }
-
+        // todo
         if (g2.dpad_left && !p2.dpad_left) {
-            if (!backScore) {
-                o.specimenScore180();
-                i.specimen();
-                backScore = true;
-            } else {
-                o.startSpecGrab();
-                i.specimen();
-                backScore = false;
-            }
+            o.specimenScore180();
+            i.specimen();
+//            if (!backScore) {
+//                o.specimenScore180();
+//                i.specimen();
+//                backScore = true;
+//            } else {
+//                o.startSpecGrab();
+//                i.specimen();
+//                backScore = false;
+//            }
         }
 
         if (g2.dpad_right && !p2.dpad_right) {
-            if (!frontScore) {
-                o.specimenScore0();
-                getL().toChamber();
-                i.hover();
-                frontScore = true;
-            } else {
-                o.specimenScore0After();
-                startFrontScoreAfter();
-                frontScore = false;
-            }
+
+
+            o.startSpecGrab();
+            i.specimen();
+
+//            if (!frontScore) {
+//                o.specimenScore0();
+//                getL().toChamber();
+//                i.hover();
+//                frontScore = true;
+//            } else {
+//                o.specimenScore0After();
+//                startFrontScoreAfter();
+//                frontScore = false;
+//            }
         }
 
         if (g2.b && !p2.b)
