@@ -206,7 +206,7 @@ public class Intake {
         setGrabState(GrabState.CLOSED);
         setRotateState(RotateState.HOVER);
         setPivotState(PivotState.HOVER);
-        pivot.setPosition(0.15);
+        //pivot.setPosition(0.15);
     }
 
     public void start() {
